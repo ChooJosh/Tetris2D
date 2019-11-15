@@ -27,6 +27,14 @@ public class Playfield : MonoBehaviour
             Destroy(grid[x, y].gameObject);
             grid[x, y] = null;
         }
+
+		GameObject sk = GameObject.Find("scorekeeper");
+		GameScore gs = sk.GetComponent<GameScore>();
+
+		if(gs)
+		{
+			gs.addToScore(100);
+		}
     }
     public static void decreaseRow(int y)
     {
