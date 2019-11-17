@@ -43,91 +43,94 @@ public class Group : MonoBehaviour
     }
     void Update()
     {
-        // Move Left
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            // Modify position
-            transform.position += new Vector3(-1, 0, 0);
+		if(Time.timeScale > 0)
+		{
+			// Move Left
+			if (Input.GetKeyDown(KeyCode.LeftArrow))
+			{
+				// Modify position
+				transform.position += new Vector3(-1, 0, 0);
 
-            // See if valid
-            if (isValidGridPos())
-                // It's valid. Update grid.
-                updateGrid();
-            else
-                // It's not valid. revert.
-                transform.position += new Vector3(1, 0, 0);
-        }
+				// See if valid
+				if (isValidGridPos())
+					// It's valid. Update grid.
+					updateGrid();
+				else
+					// It's not valid. revert.
+					transform.position += new Vector3(1, 0, 0);
+			}
 
-        // Move Right
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            // Modify position
-            transform.position += new Vector3(1, 0, 0);
+			// Move Right
+			else if (Input.GetKeyDown(KeyCode.RightArrow))
+			{
+				// Modify position
+				transform.position += new Vector3(1, 0, 0);
 
-            // See if valid
-            if (isValidGridPos())
-                // It's valid. Update grid.
-                updateGrid();
-            else
-                // It's not valid. revert.
-                transform.position += new Vector3(-1, 0, 0);
-        }
+				// See if valid
+				if (isValidGridPos())
+					// It's valid. Update grid.
+					updateGrid();
+				else
+					// It's not valid. revert.
+					transform.position += new Vector3(-1, 0, 0);
+			}
 
-        // Rotate
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            transform.Rotate(0, 0, -90);
+			// Rotate
+			else if (Input.GetKeyDown(KeyCode.UpArrow))
+			{
+				transform.Rotate(0, 0, -90);
 
-            // See if valid
-            if (isValidGridPos())
-                // It's valid. Update grid.
-                updateGrid();
-            else
-                // It's not valid. revert.
-                transform.Rotate(0, 0, 90);
-        }
+				// See if valid
+				if (isValidGridPos())
+					// It's valid. Update grid.
+					updateGrid();
+				else
+					// It's not valid. revert.
+					transform.Rotate(0, 0, 90);
+			}
 
-        // Move Downwards and Fall
-        else if (Input.GetKeyDown(KeyCode.DownArrow) ||
-                 Time.time - lastFall >= speed)
-        {
+			// Move Downwards and Fall
+			else if (Input.GetKeyDown(KeyCode.DownArrow) ||
+					 Time.time - lastFall >= speed)
+			{
 
-            // Modify position
-            transform.position += new Vector3(0, -1, 0);
+				// Modify position
+				transform.position += new Vector3(0, -1, 0);
 
-            // See if valid
-            if (isValidGridPos())
-            {
-                // It's valid. Update grid.
-                updateGrid();
-            }
-            else
-            {
-                // It's not valid. revert.
-                transform.position += new Vector3(0, 1, 0);
+				// See if valid
+				if (isValidGridPos())
+				{
+					// It's valid. Update grid.
+					updateGrid();
+				}
+				else
+				{
+					// It's not valid. revert.
+					transform.position += new Vector3(0, 1, 0);
 
-                // Clear filled horizontal lines
-                // increments deleted every time a row is deleted
-                Playfield.deleteFullRows();
+					// Clear filled horizontal lines
+					// increments deleted every time a row is deleted
+					Playfield.deleteFullRows();
 
-                // speed up game every 10 deleted lines
-                if(Playfield.deleted % 10 == 0)
-                {
-                    if (speed > 0.0)
-                    {
-                        speed -= 0.1;
-                    }
-                }
+					// speed up game every 10 deleted lines
+					if (Playfield.deleted % 10 == 0)
+					{
+						if (speed > 0.0)
+						{
+							speed -= 0.1;
+						}
+					}
 
-                // Spawn next Group
-                FindObjectOfType<Spawner>().spawnNext();
+					// Spawn next Group
+					FindObjectOfType<Spawner>().spawnNext();
 
-                // Disable script
-                enabled = false;
-            }
-            lastFall = Time.time;
-            speed = tempSpeed;
-        }
+					// Disable script
+					enabled = false;
+				}
+				lastFall = Time.time;
+				speed = tempSpeed;
+			}
+		}
     }
     void Start()
     {
