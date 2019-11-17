@@ -10,16 +10,18 @@ public class Spawner : MonoBehaviour
     public void spawnNext()
     {
         // Random Index
-        int i = Random.Range(0, groups.Length);
 
         // Spawn Group at current Position
-        Instantiate(groups[i],
+        Instantiate(FindObjectOfType<NextBlock>().nextGroup,
                     transform.position,
                     Quaternion.identity);
+
+        FindObjectOfType<NextBlock>().spawnNext();
     }
     void Start()
     {
         // Spawn initial Group
+        FindObjectOfType<NextBlock>().spawnNext();
         spawnNext();
     }
 }
