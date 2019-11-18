@@ -63,8 +63,9 @@ public class Playfield : MonoBehaviour
                 return false;
         return true;
     }
-    public static void deleteFullRows()
+    public static bool deleteFullRows()
     {
+        bool hasDeleted = false;
         for (int y = 0; y < h; ++y)
         {
             if (isRowFull(y))
@@ -73,7 +74,9 @@ public class Playfield : MonoBehaviour
                 decreaseRowsAbove(y + 1);
                 --y;
                 deleted++;
+                hasDeleted = true;
             }
         }
+        return hasDeleted;
     }
 }

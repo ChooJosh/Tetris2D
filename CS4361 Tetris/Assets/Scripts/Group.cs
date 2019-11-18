@@ -110,26 +110,8 @@ public class Group : MonoBehaviour
 
 				transform.position += new Vector3(0, 1, 0);
 				updateGrid();
-				// Clear filled horizontal lines
-				// increments deleted every time a row is deleted
-				Playfield.deleteFullRows();
-
-				// speed up game every 10 deleted lines
-				if (Playfield.deleted % 10 == 0)
-				{
-					if (speed > 0.0)
-					{
-						speed -= 0.1;
-					}
-				}
-
-				// Spawn next Group
-				FindObjectOfType<Spawner>().spawnNext();
-
-				// Disable script
-				enabled = false;
+                onGroupFallFinished();
 				lastFall = Time.time;
-				speed = tempSpeed;
             }
 
             // Move Downwards and Fall
@@ -151,27 +133,9 @@ public class Group : MonoBehaviour
 					// It's not valid. revert.
 					transform.position += new Vector3(0, 1, 0);
 
-					// Clear filled horizontal lines
-					// increments deleted every time a row is deleted
-					Playfield.deleteFullRows();
-
-					// speed up game every 10 deleted lines
-					if (Playfield.deleted % 10 == 0)
-					{
-						if (speed > 0.0)
-						{
-							speed -= 0.1;
-						}
-					}
-
-					// Spawn next Group
-					FindObjectOfType<Spawner>().spawnNext();
-
-					// Disable script
-					enabled = false;
+                    onGroupFallFinished();
 				}
 				lastFall = Time.time;
-				speed = tempSpeed;
 			}
 		}
     }
@@ -183,5 +147,27 @@ public class Group : MonoBehaviour
             Debug.Log("GAME OVER");
             Destroy(gameObject);
         }
+    }
+
+    void onGroupFallFinished()
+    {
+        // Clear filled horizontal lines
+        // increments deleted every time a row is deleted
+        bool hasDeleted = Playfield.deleteFullRows();
+
+        // speed up game every 5 deleted lines
+        if (hasDeleted && Playfield.deleted % 1 == 0)
+        {
+            if (speed > 0.1)
+            {
+                speed -= 0.1;
+            }
+        }
+
+        // Spawn next Group
+        FindObjectOfType<Spawner>().spawnNext();
+
+        // Disable script
+        enabled = false;
     }
 }
