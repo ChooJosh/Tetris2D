@@ -101,6 +101,36 @@ public class Group : MonoBehaviour
                     // It's not valid. revert.
                     transform.Rotate(0, 0, -90);
             }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                while (isValidGridPos())
+				{
+					transform.position += new Vector3(0, -1, 0);
+				}
+
+				transform.position += new Vector3(0, 1, 0);
+				updateGrid();
+				// Clear filled horizontal lines
+				// increments deleted every time a row is deleted
+				Playfield.deleteFullRows();
+
+				// speed up game every 10 deleted lines
+				if (Playfield.deleted % 10 == 0)
+				{
+					if (speed > 0.0)
+					{
+						speed -= 0.1;
+					}
+				}
+
+				// Spawn next Group
+				FindObjectOfType<Spawner>().spawnNext();
+
+				// Disable script
+				enabled = false;
+				lastFall = Time.time;
+				speed = tempSpeed;
+            }
 
             // Move Downwards and Fall
             else if (Input.GetKeyDown(KeyCode.DownArrow) ||
