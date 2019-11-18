@@ -5,8 +5,6 @@ public class Group : MonoBehaviour
 {
     // Time since last gravity tick
     public static float lastFall = 0f;
-    public static double speed = 1.0;
-    public static double tempSpeed = speed;
     public static double startTime;
     bool isValidGridPos()
     {
@@ -116,7 +114,7 @@ public class Group : MonoBehaviour
 
             // Move Downwards and Fall
             else if (Input.GetKeyDown(KeyCode.DownArrow) ||
-					 Time.time - lastFall >= speed)
+					 Time.time - lastFall >= Playfield.speed)
 			{
 
 				// Modify position
@@ -153,16 +151,7 @@ public class Group : MonoBehaviour
     {
         // Clear filled horizontal lines
         // increments deleted every time a row is deleted
-        bool hasDeleted = Playfield.deleteFullRows();
-
-        // speed up game every 5 deleted lines
-        if (hasDeleted && Playfield.deleted % 1 == 0)
-        {
-            if (speed > 0.1)
-            {
-                speed -= 0.1;
-            }
-        }
+        Playfield.deleteFullRows();
 
         // Spawn next Group
         FindObjectOfType<Spawner>().spawnNext();
