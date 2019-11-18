@@ -76,7 +76,7 @@ public class Group : MonoBehaviour
 			}
 
 			// Rotate
-			else if (Input.GetKeyDown(KeyCode.UpArrow))
+			else if (Input.GetKeyDown(KeyCode.Z))
 			{
 				transform.Rotate(0, 0, -90);
 
@@ -89,8 +89,21 @@ public class Group : MonoBehaviour
 					transform.Rotate(0, 0, 90);
 			}
 
-			// Move Downwards and Fall
-			else if (Input.GetKeyDown(KeyCode.DownArrow) ||
+            else if (Input.GetKeyDown(KeyCode.X))
+            {
+                transform.Rotate(0, 0, 90);
+
+                // See if valid
+                if (isValidGridPos())
+                    // It's valid. Update grid.
+                    updateGrid();
+                else
+                    // It's not valid. revert.
+                    transform.Rotate(0, 0, -90);
+            }
+
+            // Move Downwards and Fall
+            else if (Input.GetKeyDown(KeyCode.DownArrow) ||
 					 Time.time - lastFall >= speed)
 			{
 
