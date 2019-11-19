@@ -5,8 +5,6 @@ public class Group : MonoBehaviour
 {
     // Time since last gravity tick
     public static float lastFall = 0f;
-    public static double speed = 1.0;
-    public static double tempSpeed = speed;
     public static double startTime;
     bool isValidGridPos()
     {
@@ -76,7 +74,7 @@ public class Group : MonoBehaviour
 			}
 
 			// Rotate
-			else if (Input.GetKeyDown(KeyCode.UpArrow))
+			else if (Input.GetKeyDown(KeyCode.Z))
 			{
 				transform.Rotate(0, 0, -90);
 
@@ -89,9 +87,34 @@ public class Group : MonoBehaviour
 					transform.Rotate(0, 0, 90);
 			}
 
-			// Move Downwards and Fall
-			else if (Input.GetKeyDown(KeyCode.DownArrow) ||
-					 Time.time - lastFall >= speed)
+            else if (Input.GetKeyDown(KeyCode.X))
+            {
+                transform.Rotate(0, 0, 90);
+
+                // See if valid
+                if (isValidGridPos())
+                    // It's valid. Update grid.
+                    updateGrid();
+                else
+                    // It's not valid. revert.
+                    transform.Rotate(0, 0, -90);
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                while (isValidGridPos())
+				{
+					transform.position += new Vector3(0, -1, 0);
+				}
+
+				transform.position += new Vector3(0, 1, 0);
+				updateGrid();
+                onGroupFallFinished();
+				lastFall = Time.time;
+            }
+
+            // Move Downwards and Fall
+            else if (Input.GetKeyDown(KeyCode.DownArrow) ||
+					 Time.time - lastFall >= Playfield.speed)
 			{
 
 				// Modify position
@@ -108,27 +131,9 @@ public class Group : MonoBehaviour
 					// It's not valid. revert.
 					transform.position += new Vector3(0, 1, 0);
 
-					// Clear filled horizontal lines
-					// increments deleted every time a row is deleted
-					Playfield.deleteFullRows();
-
-					// speed up game every 10 deleted lines
-					if (Playfield.deleted % 10 == 0)
-					{
-						if (speed > 0.0)
-						{
-							speed -= 0.1;
-						}
-					}
-
-					// Spawn next Group
-					FindObjectOfType<Spawner>().spawnNext();
-
-					// Disable script
-					enabled = false;
+                    onGroupFallFinished();
 				}
 				lastFall = Time.time;
-				speed = tempSpeed;
 			}
 		}
     }
@@ -140,5 +145,18 @@ public class Group : MonoBehaviour
             Debug.Log("GAME OVER");
             Destroy(gameObject);
         }
+    }
+
+    void onGroupFallFinished()
+    {
+        // Clear filled horizontal lines
+        // increments deleted every time a row is deleted
+        Playfield.deleteFullRows();
+
+        // Spawn next Group
+        FindObjectOfType<Spawner>().spawnNext();
+
+        // Disable script
+        enabled = false;
     }
 }

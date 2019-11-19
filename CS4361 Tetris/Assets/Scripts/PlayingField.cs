@@ -8,6 +8,7 @@ public class Playfield : MonoBehaviour
     public static int h = 20;
     public static Transform[,] grid = new Transform[w, h];
     public static int deleted = 0;
+    public static double speed = 1.0;
 
     public static Vector2 roundVec2(Vector2 v)
     {
@@ -73,6 +74,11 @@ public class Playfield : MonoBehaviour
                 decreaseRowsAbove(y + 1);
                 --y;
                 deleted++;
+                if (deleted % 5 == 0 && speed > 0.1)
+                {
+                    Debug.Log("Speed up");
+                    speed -= 0.1;
+                }
             }
         }
     }
