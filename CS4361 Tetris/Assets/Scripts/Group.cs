@@ -143,6 +143,7 @@ public class Group : MonoBehaviour
         if (!isValidGridPos())
         {
             Debug.Log("GAME OVER");
+            OnGameOver.SetGameOver();
             Destroy(gameObject);
         }
     }
